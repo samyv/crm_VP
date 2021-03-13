@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+{% comment %} <div class="table w-full rounded-t-lg m-5 w-5/6 mx-auto bg-gray-800 text-gray-200">
+  <div class="table-row-group">
+    {% for member in members  %}
+    <div class="table-row">
+        <tr class="bg-gray-700 border-b border-gray-600">
+        <div class="px-4 py-3">{{member.id}}</div>
+        <div class="px-4 py-3">{{member.first_name}}</div>
+        <div class="px-4 py-3">{{member.last_name}}</div>
+        <div class="px-4 py-3">{{member.sex}}</div>
+        <tr class="bg-gray-700 border-b border-gray-600"></tr>   
+    {% endfor %}
+    </div>
+  </div>
+</div> {% endcomment %}
+
+<p class="text-lg text-center font-bold m-5">Members dog school</p>
+<div>
+  <input class="flex" type="text" id="myInput" onkeyup="searchTable('memberTable')" placeholder="Search for names..">
+  <table id="memberTable" class="rounded-t-lg m-5 w-5/6 mx-auto bg-gray-800 text-gray-200">
+    <tr class="text-left border-b border-gray-300">
+      <th class="px-4 py-3">ID</th>
+      <th class="px-4 py-3">Name</th>
+      <th class="px-4 py-3">is Staff</th>
+    </tr>
+    {% for member in members %}
+    <tr class="hover:bg-red-700 cursor-pointer bg-gray-700 border-b border-gray-600">
+      <td class="px-4 py-3">{{member.id}}</td>
+      <td class="px-4 py-3">{{member.first_name}} {{member.last_name}}</td>
+      <td class="px-4 py-3">{{member.is_staff}}</td>
+    </tr>    
+    {% endfor %}
+  </table>
+</div>
+
+<a href="/controller/member/create">create a new Member</a>
+{% load static %}
+
+<script src="{% static 'controller/searchTable.js'%}"></script>
+<script src="{% static 'controller/main.js'%}"></script>
+{% endblock content %}
+
