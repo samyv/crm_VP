@@ -4,7 +4,8 @@ from django.contrib.auth.models import AbstractUser
 
 SEX_CHOICES = (
     ("M", "MALE"),
-    ("F", "FEMALE")
+    ("F", "FEMALE"),
+    ("X", "Other")
 )
 
 # class User(AbstractUser):
@@ -28,6 +29,8 @@ class Dog(models.Model):
     # carnet = models.CharField(max_length=20)
     responsibles = models.ManyToManyField("Member", related_name="responsibles")
     conducteurs = models.ManyToManyField("Member", related_name="conducteurs")
+    created_on = models.DateField(auto_now_add=True)
+
 
     def __str__(self):
         return f"{self.id} {self.name}"
@@ -41,9 +44,13 @@ class Member(models.Model):
     last_name = models.CharField(max_length=100)
     first_name = models.CharField(max_length=20)
     email = models.EmailField(max_length=100)
+    phonenumber = models.CharField(max_length=20)
     is_staff = models.BooleanField(default=False)
     sex = models.CharField(choices=SEX_CHOICES,max_length=500)
     address = models.ForeignKey("Address",on_delete=models.SET_NULL, null=True)
+    birthdate = models.DateField()
+    created_on = models.DateField(auto_now_add=True)
+
 
     
     def __str__(self):
@@ -52,9 +59,25 @@ class Member(models.Model):
 class Address(models.Model):
     country = models.CharField(max_length=20, default="Belgium")
     street = models.CharField(max_length=100)
-    zipcode = models.CharField(max_length=10)
+    zipcode = models.CharField(max_length=8)
     number = models.IntegerField()
     boxcode = models.CharField(max_length=4, null=True)
 
     def __str__(self):
         return f"{self.id} {self.street} {self.number} {self.zipcode} {self.country}" 
+
+
+
+class Insurance(models.Model):
+    insurance_name = models.CharField(max_length=100)
+    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
+
+class Insurance_contract(models.Model):
+  contract_number = models.CharField(max_length=50)
+  expiry_date = models.DateField()
+  subscriber = models.ForeignKey(Member, on_delete=models.CASCADE)
+  insurance = models.ForeignKey(Insurance, on_delete=models.CASCADE)
+
+
+
+
