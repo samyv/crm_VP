@@ -55,6 +55,14 @@ class Member(models.Model):
     
     def __str__(self):
         return f"{self.id} {self.first_name} {self.last_name}"
+class Contribution(models.Model):
+    member = models.ForeignKey(Member,on_delete=models.CASCADE)
+    paid_date = models.DateField()
+    familial_contribution = models.BooleanField()
+    cash_payment = models.BooleanField()
+    transfer_payment = models.BooleanField()
+
+
 
 class Address(models.Model):
     country = models.CharField(max_length=20, default="Belgium")
@@ -74,6 +82,7 @@ class Insurance(models.Model):
 
 class Insurance_contract(models.Model):
   contract_number = models.CharField(max_length=50)
+  created_on = models.DateField(auto_now_add=True)
   expiry_date = models.DateField()
   subscriber = models.ForeignKey(Member, on_delete=models.CASCADE)
   insurance = models.ForeignKey(Insurance, on_delete=models.CASCADE)
