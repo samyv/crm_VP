@@ -1,5 +1,5 @@
 from django import forms
-from .models import Member, Address
+from .models import Member, Address, Dog, Race
 from django.contrib.auth.forms import AuthenticationForm
 
 
@@ -46,3 +46,15 @@ class MemberForm(forms.Form):
     username = forms.CharField()
     sex = forms.ChoiceField(choices=SEX_CHOICES)
     address = forms.ModelChoiceField(queryset=Address.objects.all())
+
+
+class DogForm(forms.Form):
+    
+    name = forms.CharField()
+    race = forms.ModelChoiceField(queryset=Race.objects.all())
+    sex = forms.ChoiceField(choices=SEX_CHOICES)
+
+class DogModelForm(forms.ModelForm):
+    class Meta:
+        model = Dog
+        fields = ('name','race','sex')
