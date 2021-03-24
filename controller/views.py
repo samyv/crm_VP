@@ -1,70 +1,55 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
+from django.contrib.auth import logout
+from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
-
+from django import forms
+from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Member, Dog, Address, Race
-from .forms import MemberForm, MemberModelForm
+from .forms import MemberForm, MemberModelForm, UserLoginForm
 
 def index(request):
     return render(request, "controller/alsobase.html")
 
-# Create your views here.
+class ListMembers(LoginRequiredMixin, ListView):
+    print("list")
+    template_name = "controller/member/member_list.html"
+    queryset = Member.objects.all()
+    context_object_name = "members"
 
-def landing(request):
-    if(request.POST):
-        post_mg = request.POST
-        print(post_mg["username"])
-    else:
-        print("landing")
-    return render(request, "landing.html")
+class DetailMember(LoginRequiredMixin, DetailView):
+    template_name = "controller/member/member_detail.html"
+    queryset = Member.objects.all()
+    context_object_name = "member"
 
-def list_members(request):
-    print("here")
-    members = Member.objects.all()
-    context = {
-        "members": members
-    }
-    return render(request,"controller/member/member_list.html",context )
+class CreateMember(LoginRequiredMixin, CreateView):
+    template_name = "controller/member/member_form.html"
+    form_class = MemberModelForm()
+    
+    def get_success_url(self):
+        return reverse("member/list")
 
-def create_member(request):
-    form = MemberModelForm()
-    if request.method == "POST":
-        print("receiving a new POST: new member..")
-        form = MemberModelForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("/controller/member/list")
-    context = {
-        "form": form
-    }
-    return render(request, "controller/member/member_form.html",context)
+class UpdateMember(LoginRequiredMixin, UpdateView):
 
-def update_member(request, pk):
-    member = Member.objects.get(id=pk)
-    addresses = Address.objects.all()
-    form = MemberModelForm(instance=member)
-    if request.method == "POST":
-        print("here")
-        form = MemberModelForm(request.POST, instance=member)
-        print(form.data)
-        if form.is_valid():
-            form.save()
-            return redirect("/controller/member/list")
-    context = {
-        "form":form,
-        "member":member,
-        "addresses": addresses
-    }
-    return render(request, "controller/member/member_update.html",context)
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        
+        # Add in a QuerySet of all the books
+        context['addresses'] = Address.objects.all()
+        return context
 
-def member_detail(request,pk):
-    member = Member.objects.get(id=pk)
-    context = {
-        "member":member
-    }
-    print(member)
-    return render(request, "controller/member/member_detail.html", context)
+    template_name = "controller/member/member_update.html"
+    form_class = MemberModelForm
+    queryset = Member.objects.all()
+    
+    def get_success_url(self, *args, **kwargs):
+        #TODO reverse to detail page
+        return reverse("controller:member-list")
 
-def delete_member(request, pk):
-    member = Member.objects.get(id=pk)
-    member.delete()
-    return redirect("/controller/member/list")
+class DeleteMember(LoginRequiredMixin, DeleteView):
+    template_name = "controller/member/member_delete.html"
+    queryset = Member.objects.all()
+
+    def get_success_url(self, *args, **kwargs):
+        return reverse("controller:member-list")
