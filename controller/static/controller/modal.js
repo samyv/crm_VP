@@ -1,4 +1,4 @@
-const modal = document.querySelector('.modal');
+Pconst modal = document.querySelector('.modal');
 
 const showModal = document.querySelector('.show-modal');
 const closeModal = document.querySelectorAll('.close-modal');

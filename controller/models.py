@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
 # from django.contrib.auth.models import PermissionsMixin
 
 SEX_CHOICES = (
@@ -15,11 +16,11 @@ class Race(models.Model):
     race_name = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"{self.id} {self.race_name}"
+        return f"{self.race_name}"
 
 class Dog(models.Model):
     name = models.CharField(max_length=50)
-    race = models.ForeignKey("Race", on_delete=models.SET_NULL, null=True)
+    race = models.ManyToManyField("Race", related_name="dog_races")
     sex = models.CharField(choices=SEX_CHOICES,max_length=500)
     # puce = models.IntegerField(max_length=15)
     # vaccin_PLH = models.DateField()
@@ -29,7 +30,7 @@ class Dog(models.Model):
     # carnet = models.CharField(max_length=20)
     responsibles = models.ManyToManyField("Member", related_name="responsibles")
     conducteurs = models.ManyToManyField("Member", related_name="conducteurs")
-    created_on = models.DateField(auto_now_add=True)
+    created_on = models.DateField(null=False, blank=False,auto_now_add=True)
 
 
     def __str__(self):
@@ -54,7 +55,7 @@ class Member(models.Model):
 
     
     def __str__(self):
-        return f"{self.id} {self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name}"
 class Contribution(models.Model):
     member = models.ForeignKey(Member,on_delete=models.CASCADE)
     paid_date = models.DateField()
@@ -86,7 +87,4 @@ class Insurance_contract(models.Model):
   expiry_date = models.DateField()
   subscriber = models.ForeignKey(Member, on_delete=models.CASCADE)
   insurance = models.ForeignKey(Insurance, on_delete=models.CASCADE)
-
-
-
 

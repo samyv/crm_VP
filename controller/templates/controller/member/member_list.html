@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
- 
-<input class="flex" type="text" id="myInput" onkeyup="searchTable('memberTable')" placeholder="Search for names..">
+ <div class="flex flex-col justify-center">
+ <p class="text-lg text-center font-bold m-5">Members</p>
+ <input class="flex text-center" type="text" id="myInput" onkeyup="searchTable('memberTable')" placeholder="Search for names..">
+</div>
 <div class="container mt-4 mx-auto">
   <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
   {% for member in members  %}
@@ -31,7 +33,6 @@
   </div>
 </div> {% endcomment %}
 
-<p class="text-lg text-center font-bold m-5">Members dog school</p>
 
 
 

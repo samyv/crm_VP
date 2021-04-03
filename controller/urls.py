@@ -1,11 +1,11 @@
 from django.urls import path,include
-from .views import index, ListMembers, DetailMember, CreateMember, UpdateMember, DeleteMember
+from .views import Index, ListMembers, DetailMember, CreateMember, UpdateMember, DeleteMember
 from .views import ListDogs, DetailDog, CreateDog, UpdateDog, DeleteDog
 
 app_name = "controller"
 
 urlpatterns = [
-    path('',index, name='dashboard'),
+    path('',Index.as_view(), name='dashboard'),
 
     path("member/<int:pk>/",DetailMember.as_view(), name='member-detail'),
     path('member/create/',CreateMember.as_view(), name='member-create'),

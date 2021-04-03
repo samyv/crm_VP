@@ -9,9 +9,11 @@
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <title>CRM</title>
 </head>
-<body>
+<body  style="background-image: {% static 'images/bg.jpg' %} >
 {% include "navbar.html" %}
+<div class="root bg-fixed">
 {% block content %}
 {% endblock content %}
+</div>
 </body>
 </html>

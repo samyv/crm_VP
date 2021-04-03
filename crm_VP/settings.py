@@ -129,8 +129,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = "controller/member/list"
+LOGIN_REDIRECT_URL = "controller/"
 LOGIN_URL = "landing"
+
 # AUTH_USER_MODEL = controller.User
 
 # AUTH_USER_MODEL = 'controller.User'

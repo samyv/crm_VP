@@ -19,7 +19,7 @@ function searchTable(id_table) {
     }
   }
 
-  function addRowHandlers() {
+  function addRowHandlers(url) {
     var grid = document.getElementById("grid");
     var divs = grid.getElementsByTagName("div")
     x = divs[0]
@@ -30,7 +30,7 @@ function searchTable(id_table) {
             {
                 return function() { 
                                         var id = div.getElementsByTagName("span")[0].innerText.replace(/\D/g,"")
-                                        window.location.href = "/controller/member/"+id;
+                                        window.location.href = url+id;
                                  };
             };
 
@@ -38,5 +38,13 @@ function searchTable(id_table) {
     }
 }
 
-window.onload = addRowHandlers();
+if (window.location.href.includes("dog")){
+  console.log("dog list")
+  window.onload = addRowHandlers("/controller/dog/");
+} else {
+  console.log("member list")
+  window.onload = addRowHandlers("/controller/member/");
+}
 
+console.log("delete input")
+document.getElementById("myInput").value = ""

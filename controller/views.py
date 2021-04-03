@@ -8,9 +8,22 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Member, Dog, Address, Race
 from .forms import MemberForm, MemberModelForm, UserLoginForm, DogForm, DogModelForm
 
-def index(request):
-    return render(request, "controller/alsobase.html")
 
+class Index(LoginRequiredMixin, TemplateView):
+    
+    template_name = "dashboard.html"
+
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+                # Add in a QuerySet of all the books
+        
+        context["dog_amount"] = Dog.objects.count()
+        context["member_count"] = Member.objects.count()
+
+        return context
+       
 class ListMembers(LoginRequiredMixin, ListView):
     print("list")
     template_name = "controller/member/member_list.html"
@@ -21,6 +34,17 @@ class DetailMember(LoginRequiredMixin, DetailView):
     template_name = "controller/member/member_detail.html"
     queryset = Member.objects.all()
     context_object_name = "member"
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+                # Add in a QuerySet of all the books
+        
+        member = self.get_object()
+        dogs = member.conducteurs.all()
+        context["dogs"] = dogs
+        print(dogs)
+        return context
 
 class CreateMember(LoginRequiredMixin, CreateView):
     template_name = "controller/member/member_form.html"
@@ -65,6 +89,22 @@ class DetailDog(LoginRequiredMixin, DetailView):
     template_name = "controller/dog/dog_detail.html"
     queryset = Dog.objects.all()
     context_object_name = "dog"
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+                # Add in a QuerySet of all the books
+        
+        dog = self.get_object()
+        print(dog)
+        conducteurs = dog.conducteurs.all()
+        responsibles = dog.responsibles.all()
+        context["conducteurs"] = conducteurs
+        print(conducteurs)
+        print(responsibles)
+
+        return context
+        
+
 
 class CreateDog(LoginRequiredMixin, CreateView):
     template_name = "controller/dog/dog_form.html"
